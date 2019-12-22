@@ -18,8 +18,11 @@ app.use(bodyParser.urlencoded({
 
 const cityDb = require('./crud/cityDb');
 const userDb = require('./crud/userDb');
+const stuffDb = require('./crud/stuffDb');
+const dispatchDb = require('./crud/dispatchDb');
+const orderDb = require('./crud/orderDb');
 
-require('./routes/index')(app, cityDb, userDb);
+require('./routes/index')(app, cityDb, userDb, stuffDb, dispatchDb, orderDb);
 
 app.use(logger('dev'));
 

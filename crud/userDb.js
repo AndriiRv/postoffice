@@ -7,6 +7,8 @@ const saveUser = (request, response) => {
         [roleId, username, password], (error, results) => {
             if (error) {
                 console.log(error.stack);
+
+                pool.release();
                 response.status(500).send(error.stack);
             } else {
                 saveUserWithCredentialId(request, response, username, results.rows[0].id);
@@ -24,6 +26,7 @@ function saveUserWithCredentialId(request, response, username, credentialId) {
         [credentialId, name, surname, cityId, address, email, telephone], (error) => {
             if (error) {
                 console.log(error.stack);
+                pool.release();
             }
         });
 }
@@ -32,6 +35,7 @@ const getUsers = (request, response) => {
     pool.query('SELECT * FROM "user" AS u RIGHT JOIN credential AS c ON c.id = u.credential_id', (error, results) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
             response.status(200).json(results.rows);
         }
@@ -47,6 +51,7 @@ const updateUser = (request, response) => {
     pool.query('SELECT * FROM "user" AS u INNER JOIN credential AS c ON c.id = u.credential_id WHERE u.id = ($1)', [id], (error, results) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
             userId = results.rows[0].id;
 
@@ -63,6 +68,7 @@ function updateCredentialById(userId, newPassword) {
     pool.query('UPDATE credential SET password = ($2) WHERE id = ($1)', [userId, newPassword], (error) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         }
     });
 }
@@ -72,6 +78,7 @@ function updateUserById(userId, name, surname, cityId, address, email, telephone
         [userId, name, surname, cityId, address, email, telephone], (error) => {
             if (error) {
                 console.log(error.stack);
+                pool.release();
             }
         });
 }
@@ -82,6 +89,7 @@ const deleteUser = (request, response) => {
     pool.query('DELETE FROM credential WHERE id = ($1) RETURNING username', [id], (error, results) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
             console.log(`User with '${results.rows[0].username}' was deleted`);
             response.status(201).send(`User with '${results.rows[0].username}' was deleted`);

@@ -17,9 +17,10 @@ const saveCity = (request, response) => {
     pool.query('INSERT INTO city (title) VALUES ($1)', [title], (error) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
-            response.status(201).send(`City was added with title: '${title}'`);
             console.log(`City was added with title: '${title}'`);
+            response.status(201).send(`City was added with title: '${title}'`);
         }
     })
 };
@@ -33,18 +34,24 @@ const updateCity = (request, response) => {
     pool.query('SELECT * FROM city WHERE id = ($1)', [id], (error, results) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
             oldTitle = results.rows[0].title;
+            console.log("oldTitle: " + oldTitle);
+            console.log("new: " + results.rows[0].id);
+
             response.status(200);
         }
+
     });
 
     pool.query('UPDATE city SET title = ($2) WHERE id = ($1)', [id, title], (error) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
-            response.status(201).send(`City was updated with old title: '${oldTitle}', on title: '${title}'`);
             console.log(`City was updated with old title: '${oldTitle}', on title: '${title}'`);
+            response.status(201).send(`City was updated with old title: '${oldTitle}', on title: '${title}'`);
         }
     })
 };
@@ -52,12 +59,13 @@ const updateCity = (request, response) => {
 const deleteCity = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query('DELETE FROM city WHERE id = ($1)', [id], (error) => {
+    pool.query('DELETE FROM city WHERE id = ($1) RETURNING title', [id], (error, results) => {
         if (error) {
             console.log(error.stack);
+            pool.release();
         } else {
-            response.status(201).send(`City was deleted with id: '${id}'`);
-            console.log(`City was deleted with id: '${id}'`);
+            console.log(`City - '${results.rows[0].title}' was deleted`);
+            response.status(201).send(`City - '${results.rows[0].title}' was deleted`);
         }
     });
 };
