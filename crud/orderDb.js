@@ -26,7 +26,7 @@ const saveOrder = (request, response) => {
             } else {
                 console.log(`Order was added with dispatchId: '${dispatchId}' and price: '${price}'`);
 
-                response.status(201).send(`Order was added with dispatchId: '${dispatchId}' and price: '${price}'`);
+                response.status(201).redirect("/");
             }
         })
 };
@@ -42,7 +42,7 @@ const updateOrder = (request, response) => {
         } else {
             console.log(`Order was updated on new price: '${price}'`);
 
-            response.status(201).send(`Order was updated on new price: '${price}'`);
+            response.status(201).redirect("/");
         }
     })
 };
@@ -56,7 +56,8 @@ const deleteOrder = (request, response) => {
             pool.release();
         } else {
             console.log(`Order - '${results.rows[0].id}' was deleted`);
-            response.status(201).send(`Order - '${results.rows[0].id}' was deleted`);
+
+            response.status(201).redirect("/");
         }
     });
 };

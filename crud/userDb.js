@@ -14,7 +14,7 @@ const saveUser = (request, response) => {
                 saveUserWithCredentialId(request, response, username, results.rows[0].id);
 
                 console.log(`User was added with username: '${username}'`);
-                response.status(201).send(`User was added with username: '${username}'`);
+                response.status(201).redirect("/");
             }
         });
 };
@@ -59,7 +59,7 @@ const updateUser = (request, response) => {
             updateUserById(userId, name, surname, cityId, address, email, telephone, response);
 
             console.log(`User with username: '${results.rows[0].username}' was updated`);
-            response.status(201).send(`User with username: '${results.rows[0].username}' was updated`);
+            response.status(201).redirect("/");
         }
     });
 };
@@ -92,7 +92,7 @@ const deleteUser = (request, response) => {
             pool.release();
         } else {
             console.log(`User with '${results.rows[0].username}' was deleted`);
-            response.status(201).send(`User with '${results.rows[0].username}' was deleted`);
+            response.status(201).redirect("/");
         }
     });
 };

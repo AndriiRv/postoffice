@@ -22,7 +22,7 @@ const saveStuff = (request, response) => {
             } else {
                 console.log(`Stuff was added with title: '${title}' and weight: '${weight}'`);
 
-                response.status(201).send(`Stuff was added with title: '${title}' and weight: '${weight}'`);
+                response.status(201).redirect("/");
             }
         })
 };
@@ -52,7 +52,7 @@ const updateStuff = (request, response) => {
         } else {
             console.log(`Stuff was updated with old title: '${oldTitle}', on new title: '${title}' and old weight: '${oldWeight}' on new weight: '${weight}'`);
 
-            response.status(201).send(`Stuff was updated with old title: '${oldTitle}', on new title: '${title}' and old weight: '${oldWeight}' on new weight: '${weight}'`);
+            response.status(201).redirect("/");
         }
     })
 };
@@ -66,7 +66,7 @@ const deleteStuff = (request, response) => {
             pool.release();
         } else {
             console.log(`Stuff - '${results.rows[0].title}' with weight: '${results.rows[0].weight}' was deleted`);
-            response.status(201).send(`Stuff - '${results.rows[0].title}' with weight: '${results.rows[0].weight}' was deleted`);
+            response.status(201).redirect("/");
         }
     });
 };

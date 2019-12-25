@@ -20,7 +20,7 @@ const saveCity = (request, response) => {
             pool.release();
         } else {
             console.log(`City was added with title: '${title}'`);
-            response.status(201).send(`City was added with title: '${title}'`);
+            response.status(201).redirect("/");
         }
     })
 };
@@ -40,7 +40,7 @@ const updateCity = (request, response) => {
             console.log("oldTitle: " + oldTitle);
             console.log("new: " + results.rows[0].id);
 
-            response.status(200);
+            response.status(200).redirect("/");
         }
 
     });
@@ -51,7 +51,7 @@ const updateCity = (request, response) => {
             pool.release();
         } else {
             console.log(`City was updated with old title: '${oldTitle}', on title: '${title}'`);
-            response.status(201).send(`City was updated with old title: '${oldTitle}', on title: '${title}'`);
+            response.status(201);
         }
     })
 };
@@ -65,7 +65,7 @@ const deleteCity = (request, response) => {
             pool.release();
         } else {
             console.log(`City - '${results.rows[0].title}' was deleted`);
-            response.status(201).send(`City - '${results.rows[0].title}' was deleted`);
+            response.status(201).redirect("/");
         }
     });
 };

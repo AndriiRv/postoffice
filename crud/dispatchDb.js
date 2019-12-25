@@ -1,7 +1,8 @@
 const pool = require('../config/db');
 
 const getDispatch = (request, response) => {
-    pool.query('SELECT d.id, u.name, u.surname, s.title, s.weight, c1.title AS from_city, c2.title AS to_city ' +
+    pool.query('SELECT d.id, u.name, u.surname, s.title, s.weight, c1.title AS from_city, c2.title AS to_city, ' +
+        'd.date, d.time ' +
         'FROM dispatch AS d ' +
         'INNER JOIN "user" AS u ON u.id = d.user_id ' +
         'INNER JOIN stuff AS s ON s.id = d.stuff_id ' +
@@ -41,7 +42,7 @@ const saveDispatch = (request, response) => {
             } else {
                 console.log(`Dispatch was added, from cityId: '${fromCityId}', to cityId: '${toCityId}'`);
 
-                response.status(201).send(`Dispatch was added, from cityId: '${fromCityId}', to cityId: '${toCityId}'`);
+                response.status(201).redirect("/");
             }
         })
 };
@@ -57,7 +58,7 @@ const updateDispatch = (request, response) => {
         } else {
             console.log(`Dispatch was updated on new fromCityId: '${fromCityId}' to toCityId: '${toCityId}'`);
 
-            response.status(201).send(`Dispatch was updated on new fromCityId: '${fromCityId}' to toCityId: '${toCityId}'`);
+            response.status(201).redirect("/");
         }
     })
 };
@@ -71,7 +72,8 @@ const deleteDispatch = (request, response) => {
             pool.release();
         } else {
             console.log(`Dispatch - '${results.rows[0].id}' was deleted`);
-            response.status(201).send(`Dispatch - '${results.rows[0].id}' was deleted`);
+
+            response.status(201).redirect("/");
         }
     });
 };
