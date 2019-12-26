@@ -6,10 +6,10 @@ module.exports = function (app, db) {
     app.post('/stuff', (req, resp) => {
         db.saveStuff(req, resp);
     });
-    app.put('/stuff/:id', (req, resp) => {
+    app.post('/update-stuff/:id', (req, resp) => {
         db.updateStuff(req, resp);
     });
-    app.delete('/stuff/:id', (req, resp) => {
+    app.post('/delete-stuff/:id', (req, resp) => {
         db.deleteStuff(req, resp);
     });
 };

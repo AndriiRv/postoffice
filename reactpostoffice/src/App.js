@@ -58,6 +58,7 @@ class App extends Component {
                                     >{item.nameItem}
                                     </button>
                                 ))}
+
                             </Nav>
                         </Col>
                         <Col md={8} sm={8}>
@@ -123,11 +124,69 @@ class Menu extends Component {
                 <div className="User">
                     <h1>Users</h1>
 
-                    {this.state.users.map(user =>
-                        <div>
-                            {user.name} {user.surname}
-                        </div>
-                    )}
+                    <form method={"post"} action={"/user"}>
+                        <input id="username" type="text" name="username" placeholder={"username"} required/>
+                        <br/>
+                        <input id="password" type="password" name="password" placeholder={"password"} required/>
+                        <br/>
+                        <input id="name" type="text" name="name" placeholder={"name"} required/>
+                        <br/>
+                        <input id="surname" type="text" name="surname" placeholder={"surname"} required/>
+                        <br/>
+                        <input id="address" type="text" name="address" placeholder={"address"} required/>
+                        <br/>
+                        <input id="email" type="email" name="email" placeholder={"email"} required/>
+                        <br/>
+                        <input id="telephone" type="text" name="telephone" placeholder={"telephone"} required/>
+                        <br/>
+                        <button className="btn btn-primary" type="submit">Save user</button>
+                    </form>
+
+                    <div>
+                        <table className="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Name, Surname</th>
+                                <th>Address</th>
+                                <th>E-mail</th>
+                                <th>Telephone</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.users.map(user =>
+                                <tr className="table-success">
+
+                                    <td>{user.id}</td>
+                                    <td>{user.username}</td>
+                                    <td>
+                                        {user.password}
+                                    </td>
+                                    <td>
+                                        {user.name} {user.surname}
+                                    </td>
+                                    <td>
+                                        {user.address}
+                                    </td>
+                                    <td>
+                                        {user.email}
+                                    </td>
+                                    <td>
+                                        {user.telephone}
+                                    </td>
+                                    <td>
+                                        <form method={"post"} action={"/delete-user/" + user.id}>
+                                            <button type="submit">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
         }
@@ -137,14 +196,42 @@ class Menu extends Component {
                     <h1>Cities</h1>
 
                     <form method={"post"} action={"/city"}>
-                        Input new city:
-                        <input type="text" name="title" required/>
+                        <input id="cityTitle" type="text" name="title" placeholder={"title"} required/>
                         <button type="submit">Save city</button>
                     </form>
 
-                    {this.state.cities.map(city =>
-                        <div>{city.title}</div>
-                    )}
+                    <div>
+                        <table className="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.cities.map(city =>
+                                <tr className="table-success">
+                                    <td>{city.id}</td>
+                                    <td>
+                                        {city.title}
+                                        <form method={"post"} action={"/update-city/" + city.id}>
+                                            <input id="stuffTitle" type="text" name="title" placeholder={"title"}
+                                                   required/>
+                                            <br/>
+                                            <button className="btn btn-primary" type="submit">Update title</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method={"post"} action={"/delete-city/" + city.id}>
+                                            <button type="submit">Delete city</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
         } else if (this.props.index === 3) {
@@ -153,44 +240,206 @@ class Menu extends Component {
                     <h1>Stuffs</h1>
 
                     <form method={"post"} action={"/stuff"}>
-                        <label for="stuffTitle">Title:</label>
-                        <input id="stuffTitle" type="text" name="title" required/>
+                        <input id="stuffTitle" type="text" name="title" placeholder={"title"} required/>
                         <br/>
-                        <label for="stuffWeight">Weight:</label>
-                        <input id="stuffWeight" type="text" name="weight" required/>
+                        <input id="stuffWeight" type="number" name="weight" placeholder={"weight"} required/>
                         <br/>
-                        <button type="submit">Save stuff</button>
+                        <button className="btn btn-primary" type="submit">Save stuff</button>
                     </form>
 
-                    {this.state.stuffs.map(stuff =>
-                        <div>Title: {stuff.title}, weight (kg): {stuff.weight}</div>
-                    )}
+                    <div>
+                        <table className="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title, Weight</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.stuffs.map(stuff =>
+                                <tr className="table-success">
+                                    <td>{stuff.id}</td>
+                                    <td>
+                                        {stuff.title}, {stuff.weight} kg
+                                        <form method={"post"} action={"/update-stuff/" + stuff.id}>
+                                            <input id="stuffTitle" type="text" name="title" placeholder={"title"}
+                                                   required/>
+                                            <br/>
+                                            <input id="stuffWeight" type="number" name="weight" placeholder={"weight"}
+                                                   required/>
+                                            <br/>
+                                            <button className="btn btn-primary" type="submit">Update title and weight</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method={"post"} action={"/delete-stuff/" + stuff.id}>
+                                            <button type="submit">Delete stuff</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
         } else if (this.props.index === 4) {
             return (
+
                 <div className="Dispatch">
                     <h1>Dispatches</h1>
 
-                    {this.state.dispatches.map(dispatch =>
-                        <div>
-                            Customer: {dispatch.name} {dispatch.surname}
-                            <br/>
-                            Title of stuff: {dispatch.title}, weight (kg): {dispatch.weight}
-                            <br/>
-                            From: {dispatch.from_city}, To: {dispatch.to_city}
-                            <br/>
-                            Date: {dispatch.date}, Time: {dispatch.time}
+                    <form method={"post"} action={"/dispatch"}>
+                        <div className="input-group-prepend">
+                            <label className="input-group-text" htmlFor="selectUserForDispatch">Customer</label>
                         </div>
-                    )}
+                        <select id={"selectUserForDispatch"} size="1" name="userId" class="custom-select" required>
+                            {this.state.users.map(user =>
+                                <option value={user.id}>{user.name} {user.surname}</option>
+                            )}
+                        </select>
+
+                        <div className="input-group-prepend">
+                            <label className="input-group-text" htmlFor="selectStuffForDispatch">Stuff</label>
+                        </div>
+                        <select id={"selectStuffForDispatch"} size="1" name="stuffId" class="custom-select" required>
+                            {this.state.stuffs.map(stuff =>
+                                <option value={stuff.id}>{stuff.title}, {stuff.weight} kg</option>
+                            )}
+                        </select>
+
+                        <div className="input-group-prepend">
+                            <label className="input-group-text" htmlFor="selectFromCityForDispatch">From City</label>
+                        </div>
+                        <select id={"selectFromCityForDispatch"} size="1" name="fromCityId" className="custom-select"
+                                required>
+                            {this.state.cities.map(city =>
+                                <option value={city.id}>{city.title}</option>
+                            )}
+                        </select>
+
+                        <div className="input-group-prepend">
+                            <label className="input-group-text" htmlFor="selectToCityForDispatch">To City</label>
+                        </div>
+                        <select id={"selectToCityForDispatch"} size="1" name="toCityId" className="custom-select"
+                                required>
+                            {this.state.cities.map(city =>
+                                <option value={city.id}>{city.title}</option>
+                            )}
+                        </select>
+
+                        <button className="btn btn-primary" type="submit">Save dispatch</button>
+                    </form>
+
+                    <div>
+                        <table className="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Title of stuff, weight</th>
+                                <th>From, to</th>
+                                <th>Date, time of dispatch</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {this.state.dispatches.map(dispatch =>
+                                <tr className="table-success">
+                                    <td>{dispatch.id}</td>
+                                    <td>{dispatch.name} {dispatch.surname}</td>
+                                    <td>{dispatch.title}, {dispatch.weight} kg</td>
+                                    <td>
+                                        {dispatch.from_city}, {dispatch.to_city}
+                                        <form method={"post"} action={"/update-dispatch/" + dispatch.id}>
+                                            <select id={"selectFromCityForDispatch"} size="1" name="fromCityId"
+                                                    className="custom-select">
+                                                {this.state.cities.map(city =>
+                                                    <option value={city.id}>{city.title}</option>
+                                                )}
+                                            </select>
+                                            <select id={"selectToCityForDispatch"} size="1" name="toCityId"
+                                                    className="custom-select">
+                                                {this.state.cities.map(city =>
+                                                    <option value={city.id}>{city.title}</option>
+                                                )}
+                                            </select>
+
+                                            <button className="btn btn-primary" type="submit">Update destination</button>
+                                        </form>
+                                    </td>
+                                    <td>{dispatch.date}, {dispatch.time}</td>
+                                    <td>
+                                        <form method={"post"} action={"/delete-dispatch/" + dispatch.id}>
+                                            <button type="submit">Delete dispatch</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
-        } else {
+        } else if (this.props.index === 5) {
             return (
                 <div className="Order">
                     <h1>Order</h1>
+
+                    <form method={"post"} action={"/order"}>
+                        <div className="input-group-prepend">
+                            <label className="input-group-text" htmlFor="selectDispatchForOrder">Dispatch</label>
+                        </div>
+                        <select id={"selectDispatchForOrder"} size="1" name="dispatchId" className="custom-select"
+                                required>
+                            {this.state.dispatches.map(dispatch =>
+                                <option
+                                    value={dispatch.id}>{dispatch.name} {dispatch.surname} - {dispatch.title}</option>
+                            )}
+                        </select>
+                        <input type="number" name="price" placeholder={"price"} required/>
+                        <button className="btn btn-primary" type="submit">Save order</button>
+                    </form>
+
                     {this.state.orders.map(order =>
                         <div>
+
+                            <table className="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Stuff</th>
+                                    <th>Price (UAH)</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.orders.map(order =>
+                                    <tr className="table-success">
+                                        <td>{order.id}</td>
+                                        <td>{order.name} {order.surname}</td>
+                                        <td>{order.title}, {order.weight} kg</td>
+                                        <td>
+                                            {order.price}
+                                            <form method={"post"} action={"/update-order/" + order.id}>
+                                                <input type="number" name="title" placeholder={"price"}
+                                                       required/>
+                                                <button className="btn btn-primary" type="submit">Update price</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method={"post"} action={"/delete-order/" + order.id}>
+                                                <button type="submit">Delete order</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+
                             Customer: {order.name} {order.surname}
                             <br/>
                             Title of stuff: {order.title}

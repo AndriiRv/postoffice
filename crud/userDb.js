@@ -1,15 +1,15 @@
 const pool = require('../config/db');
+const ROLE_USER_ID = 2;
 
 const saveUser = (request, response) => {
-    const {roleId, username, password} = request.body;
+    const {username, password} = request.body;
 
     pool.query('INSERT INTO credential (role_id, username, password) VALUES ($1, $2, $3) RETURNING id',
-        [roleId, username, password], (error, results) => {
+        [ROLE_USER_ID, username, password], (error, results) => {
             if (error) {
                 console.log(error.stack);
 
                 pool.release();
-                response.status(500).send(error.stack);
             } else {
                 saveUserWithCredentialId(request, response, username, results.rows[0].id);
 
@@ -20,10 +20,10 @@ const saveUser = (request, response) => {
 };
 
 function saveUserWithCredentialId(request, response, username, credentialId) {
-    const {name, surname, cityId, address, email, telephone} = request.body;
+    const {name, surname, address, email, telephone} = request.body;
 
-    pool.query('INSERT INTO "user" (credential_id, name, surname, city_id, address, email, telephone) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        [credentialId, name, surname, cityId, address, email, telephone], (error) => {
+    pool.query('INSERT INTO "user" (credential_id, name, surname, address, email, telephone) VALUES ($1, $2, $3, $4, $5, $6)',
+        [credentialId, name, surname, address, email, telephone], (error) => {
             if (error) {
                 console.log(error.stack);
                 pool.release();
@@ -43,8 +43,7 @@ const getUsers = (request, response) => {
 };
 
 const updateUser = (request, response) => {
-    const id = parseInt(request.params.id);
-    const {password, name, surname, cityId, address, email, telephone} = request.body;
+    const {id, password, name, surname, address, email, telephone} = request.body;
 
     var userId;
 
@@ -55,8 +54,8 @@ const updateUser = (request, response) => {
         } else {
             userId = results.rows[0].id;
 
-            updateCredentialById(userId, password, response);
-            updateUserById(userId, name, surname, cityId, address, email, telephone, response);
+            updateCredentialById(userId, password);
+            updateUserById(userId, name, surname, address, email, telephone);
 
             console.log(`User with username: '${results.rows[0].username}' was updated`);
             response.status(201).redirect("/");
@@ -73,9 +72,9 @@ function updateCredentialById(userId, newPassword) {
     });
 }
 
-function updateUserById(userId, name, surname, cityId, address, email, telephone) {
+function updateUserById(userId, name, surname, address, email, telephone) {
     pool.query('UPDATE "user" SET name = ($2), surname = ($3), city_id = ($4), address = ($5), email = ($6), telephone = ($7) WHERE id = ($1)',
-        [userId, name, surname, cityId, address, email, telephone], (error) => {
+        [userId, name, surname, address, email, telephone], (error) => {
             if (error) {
                 console.log(error.stack);
                 pool.release();
