@@ -22,9 +22,6 @@ CREATE TABLE city
     title TEXT UNIQUE NOT NULL
 );
 
-INSERT INTO city (title)
-VALUES ('Cherkassy');
-
 CREATE TABLE "user"
 (
     id            SERIAL PRIMARY KEY,

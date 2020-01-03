@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
 
-import {Navbar, NavItem, Row, Nav, Grid, Col} from "react-bootstrap";
+import {Navbar, Row, Nav, Grid, Col} from "react-bootstrap";
 
 const MENU_ITEMS = [
     {nameItem: "User", index: 1},
@@ -14,16 +14,13 @@ const MENU_ITEMS = [
 
 class App extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            activeItem: 0,
-        };
-    }
+    state = {
+        activeItem: 0,
+    };
 
     render() {
 
-        let borderInNavbar = {
+        let borderInNavBar = {
             "background-color": "gray",
             "color": "white"
         };
@@ -31,7 +28,7 @@ class App extends Component {
         const activeItem = this.state.activeItem;
         return (
             <div>
-                <Navbar style={borderInNavbar}>
+                <Navbar style={borderInNavBar}>
                     <Navbar.Header>
                         <Navbar.Brand>
                             Post Office
@@ -76,17 +73,13 @@ class App extends Component {
 
 class Menu extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-
-            cities: [],
-            users: [],
-            stuffs: [],
-            dispatches: [],
-            orders: []
-        };
-    }
+    state = {
+        cities: [],
+        users: [],
+        stuffs: [],
+        dispatches: [],
+        orders: []
+    };
 
     componentDidMount() {
         fetch('/city')
@@ -269,7 +262,8 @@ class Menu extends Component {
                                             <input id="stuffWeight" type="number" name="weight" placeholder={"weight"}
                                                    required/>
                                             <br/>
-                                            <button className="btn btn-primary" type="submit">Update title and weight</button>
+                                            <button className="btn btn-primary" type="submit">Update title and weight
+                                            </button>
                                         </form>
                                     </td>
                                     <td>
@@ -367,7 +361,8 @@ class Menu extends Component {
                                                 )}
                                             </select>
 
-                                            <button className="btn btn-primary" type="submit">Update destination</button>
+                                            <button className="btn btn-primary" type="submit">Update destination
+                                            </button>
                                         </form>
                                     </td>
                                     <td>{dispatch.date}, {dispatch.time}</td>
@@ -417,21 +412,21 @@ class Menu extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.state.orders.map(order =>
+                                {this.state.orders.map(orders =>
                                     <tr className="table-success">
-                                        <td>{order.id}</td>
-                                        <td>{order.name} {order.surname}</td>
-                                        <td>{order.title}, {order.weight} kg</td>
+                                        <td>{orders.id}</td>
+                                        <td>{orders.name} {orders.surname}</td>
+                                        <td>{orders.title}, {orders.weight} kg</td>
                                         <td>
-                                            {order.price}
-                                            <form method={"post"} action={"/update-order/" + order.id}>
+                                            {orders.price}
+                                            <form method={"post"} action={"/update-order/" + orders.id}>
                                                 <input type="number" name="title" placeholder={"price"}
                                                        required/>
                                                 <button className="btn btn-primary" type="submit">Update price</button>
                                             </form>
                                         </td>
                                         <td>
-                                            <form method={"post"} action={"/delete-order/" + order.id}>
+                                            <form method={"post"} action={"/delete-order/" + orders.id}>
                                                 <button type="submit">Delete order</button>
                                             </form>
                                         </td>
@@ -439,12 +434,6 @@ class Menu extends Component {
                                 )}
                                 </tbody>
                             </table>
-
-                            Customer: {order.name} {order.surname}
-                            <br/>
-                            Title of stuff: {order.title}
-                            <br/>
-                            Price (UAH): {order.price}
                         </div>
                     )}
                 </div>
